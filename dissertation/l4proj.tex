@@ -22,14 +22,14 @@
 %% METADATA
 \title{Health Misinformation, Covid-19, and Search} % change this to your title
 \author{Shahzeb Zafar}
-\date{April 7, 2022}
+\date{April 11, 2022}
 
 \maketitle
 
 %==============================================================================
 %% ABSTRACT
 \begin{abstract}
-    We are interested in knowing the characteristics of misinformation and whether it will decrease overtime with Covid-19 as the topic. By performing binary classification, sentiment and emotion analysis on Covid-19 tweets we discovered that misinformation does decrease over time and is characterised by negative and neutral sentiments, fear, anger, and disgust.
+    We are interested in knowing the characteristics of misinformation and whether it will decrease overtime with Covid-19 as the topic. By performing binary classification, sentiment and emotion analysis on Covid-19 tweets we discovered that misinformation does decrease over time and is characterised by negative sentiment, anger, and disgust. We can filter out information which displays these characteristics to greatly decrease the quantity of misinformation.
 \end{abstract}
 
 %==============================================================================
@@ -54,8 +54,8 @@ I would like to thank Dr. Jesus Rodriguez Perez for being a great supervisor and
 % Please note that you are under no obligation to sign 
 % this declaration, but doing so would help future students.
 %
-%\def\consentname {My Name} % your full name
-%\def\consentdate {20 March 2018} % the date you agree
+\def\consentname {Shahzeb Zafar} % your full name
+\def\consentdate {11 April 2022} % the date you agree
 %
 \educationalconsent
 
@@ -165,15 +165,13 @@ The steps to take to fulfill the goals of this project are:
     \item
     Separate the data into groups based on topics.
     \item
-    Carry out sentiment analysis.
-    \item
-    Classify the underlying emotion in each instance of data.
+    Carry out sentiment and emotion classification.
     \item
     Visualise the results using appropriate means and analysing them.
 \end{enumerate}
 \vspace{0.4cm}
 
-For the first step, we have decided to go with Twitter data due to the ease of using the Twitter API and the large datasets readily available online. Our aim for the project is to have around a million tweets for evaluation. Steps 2, 4 and 5 a classification tasks which can carried out by a NLP model such as BERT while step 3 would involve clustering of some sort.
+For the first step, we have decided to go with Twitter data due to the ease of using the Twitter API and the large datasets readily available online. Our aim for the project is to have around a million tweets for evaluation. Steps 2 and 4 are classification tasks which can be carried out by a NLP model such as BERT while step 3 would involve clustering of some sort.
 
 %==================================================================================================================================
 \chapter{Background}
@@ -315,341 +313,79 @@ From our analysis of the misinformation per topic in each period, we can see whi
 
 \section{Sentiment Analysis}
 
-In this section, we will look at the correlation between the sentiments of each topic and the misinformation they contain. For Masks, in figure \ref{fig:masksen} and table \ref{tab:masksen} we can see that negative sentiment has a moderate positive correlation with an increase in misinformation whereas positive sentiment has a moderate negative correlation while neutral has almost no correlation.
-
-\begin{table}[h]
-\begin{minipage}[c]{0.30\linewidth}
-\centering
-\begin{tabular}{@{}ll@{}}
-\toprule
-Sentiment & Pearson Correlation Coefficient \\ \midrule
-Positive  & \multicolumn{1}{c}{-0.522}      \\
-Negative  & \multicolumn{1}{c}{0.508}       \\
-Neutral   & \multicolumn{1}{c}{0.027}       \\ \bottomrule
-\end{tabular}
-\caption{Pearson Correlation Coefficients for Masks Sentiment}
-\label{tab:masksen}
-\end{minipage}\hfill
-\begin{minipage}[c]{0.55\linewidth}
-\centering
-\includegraphics[width=\textwidth]{images/MasksSentiment.png}
-\captionof{figure}{Ratios of Sentiment and Misinformation for Masks}
-\label{fig:masksen}
-\end{minipage}
-\end{table}
-
-For Symptoms, in figure \ref{fig:sympsen} and table \ref{tab:sympsen} just like with Masks, there is a strong positive and negative correlation for negative and positive sentiments respectively with neutral having a very weak negative correlation. So far we can see that negative sentiment contributes more to misinformation while positive sentiment is the opposite.
-
-
-\begin{table}[h]
-\begin{minipage}[c]{\linewidth}
-\centering
-\begin{tabular}{@{}ll@{}}
-\toprule
-Sentiment & Pearson Correlation Coefficient \\ \midrule
-Positive  & \multicolumn{1}{c}{-0.698}      \\
-Negative  & \multicolumn{1}{c}{0.698}       \\
-Neutral   & \multicolumn{1}{c}{-0.135}       \\ \bottomrule
-\end{tabular}
-\caption{Pearson Correlation Coefficients for Symptoms Sentiment}
-\label{tab:sympsen}
-\end{minipage}\hfill
-\end{table}
-
-For the topic Treatment, figure \ref{fig:treatsen} and table \ref{tab:treatsen} show that negative sentiment has a moderate positive correlation, positive sentiment has a moderate negative correlation, and neutral sentiment has almost no correlation with an increase in misinformation. The trend from earlier continues.
+In this section, we will look at the correlation between the sentiments of each topic and the misinformation they contain. The correlation coefficients for the sentiments of each topic are shown in table \ref{tab:topsen}.
 
 \begin{table}[H]
-\begin{minipage}[c]{\linewidth}
 \centering
-\begin{tabular}{@{}ll@{}}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}lllllllll@{}}
 \toprule
-Sentiment & Pearson Correlation Coefficient \\ \midrule
-Positive  & \multicolumn{1}{c}{-0.454}      \\
-Negative  & \multicolumn{1}{c}{0.583}       \\
-Neutral   & \multicolumn{1}{c}{-0.004}       \\ \bottomrule
-\end{tabular}
-\caption{Pearson Correlation Coefficients for Treatment Sentiment}
-\label{tab:treatsen}
-\end{minipage}\hfill
+         & Masks                      & Symptoms                   & Treatment                  & Science                   & Health                     & Economy                    & Lockdown                   & Politics                   \\ \midrule
+         &                            &                            &                            &                           &                            &                            &                            &                            \\
+Positive & \multicolumn{1}{c}{-0.522} & \multicolumn{1}{c}{-0.698} & \multicolumn{1}{c}{-0.454} & \multicolumn{1}{c}{0.568} & \multicolumn{1}{c}{-0.881} & \multicolumn{1}{c}{-0.611} & \multicolumn{1}{c}{-0.618} & \multicolumn{1}{c}{-0.509} \\
+         &                            &                            &                            &                           &                            &                            &                            &                            \\
+Negative & \multicolumn{1}{c}{0.508}  & \multicolumn{1}{c}{0.698}  & \multicolumn{1}{c}{0.583}  & \multicolumn{1}{c}{0.631} & \multicolumn{1}{c}{0.027}  & \multicolumn{1}{c}{0.555}  & \multicolumn{1}{c}{0.583}  & \multicolumn{1}{c}{0.409}  \\
+         &                            &                            &                            &                           &                            &                            &                            &                            \\
+Neutral  & \multicolumn{1}{c}{0.027}  & \multicolumn{1}{c}{-0.135} & \multicolumn{1}{c}{-0.004} & \multicolumn{1}{c}{0.024} & \multicolumn{1}{c}{0.708}  & \multicolumn{1}{c}{-0.031} & \multicolumn{1}{c}{-0.054} & \multicolumn{1}{c}{0.001}  \\
+         &                            &                            &                            &                           &                            &                            &                            &                            \\ \bottomrule
+\end{tabular}%
+}
+\caption{Pearson Correlation Coefficients for Sentiment}
+\label{tab:topsen}
 \end{table}
 
-In figure \ref{fig:scisen} and table \ref{fig:scisen} a strong positive correlation is observed for negative sentiment in Science as well as a moderate negative correlation for positive sentiment and a very weak positive correlation for neutral sentiment. Thus far half of our topics of interest have shown high correlation coefficients for negative sentiment so it's likely that it's a characteristic of misinformation.
+For Masks, we can see that negative sentiment has a moderate positive correlation with an increase in misinformation whereas positive sentiment has a moderate negative correlation while neutral has almost no correlation.
 
-\begin{table}[h]
-\begin{minipage}[c]{\linewidth}
-\centering
-\begin{tabular}{@{}ll@{}}
-\toprule
-Sentiment & Pearson Correlation Coefficient \\ \midrule
-Positive  & \multicolumn{1}{c}{-0.568}      \\
-Negative  & \multicolumn{1}{c}{0.631}       \\
-Neutral   & \multicolumn{1}{c}{0.024}       \\ \bottomrule
-\end{tabular}
-\caption{Pearson Correlation Coefficients for Science Sentiment}
-\label{tab:scisen}
-\end{minipage}\hfill
+In Symptoms, just like with Masks, there is a strong positive and negative correlation for negative and positive sentiments respectively with neutral having a very weak negative correlation. So far we can see that negative sentiment contributes more to misinformation while positive sentiment is the opposite.
 
-\end{table}
+For the topic Treatment, we see in the table that negative sentiment has a moderate positive correlation, positive sentiment has a moderate negative correlation, and neutral sentiment has almost no correlation with an increase in misinformation. The trend from earlier continues.
 
-Health is where we see our first departure from the norm. Figure \ref{fig:healthsen} and table \ref{fig:healthsen} show that positive sentiment has a very strong negative correlation, negative sentiment has a very weak positive correlation, and neutral sentiment has a strong positive correlation to misinformation. So far this is a first for us since it shows that it's not always the case that misinformation is characterised by negative sentiment.
+A strong positive correlation is observed for negative sentiment in Science as well as a moderate negative correlation for positive sentiment and a very weak positive correlation for neutral sentiment. Thus far half of our topics of interest have shown high correlation coefficients for negative sentiment so it's likely this is a characteristic of misinformation.
 
-\begin{table}[H]
-\begin{minipage}[c]{0.30\linewidth}
-\centering
-\begin{tabular}{@{}ll@{}}
-\toprule
-Sentiment & Pearson Correlation Coefficient \\ \midrule
-Positive  & \multicolumn{1}{c}{-0.881}      \\
-Negative  & \multicolumn{1}{c}{0.027}       \\
-Neutral   & \multicolumn{1}{c}{0.708}       \\ \bottomrule
-\end{tabular}
-\caption{Pearson Correlation Coefficients for Health Sentiment}
-\label{tab:healthsen}
-\end{minipage}\hfill
-\begin{minipage}[c]{0.55\linewidth}
-\centering
-\includegraphics[width=\textwidth]{images/HealthSentiment.png}
-\captionof{figure}{Ratios of Sentiment and Misinformation for Health}
-\label{fig:healthsen}
-\end{minipage}
-\end{table}
+Health is where we see our first departure from the norm. Table \ref{tab:topsen} shows that positive sentiment has a very strong negative correlation, negative sentiment has a very weak positive correlation, and neutral sentiment has a strong positive correlation to misinformation. So far this is a first for us since it shows that it's not always the case that misinformation is characterised by negative sentiment.
 
-We return to earlier results with Economy. In figure \ref{fig:ecosen} and table \ref{tab:ecosen} we can see that negative sentiment has a moderate positive correlation while positive and neutral sentiment have very strong and very weak correlations respectively.
+We return to earlier results with Economy. We observe that negative sentiment has a moderate positive correlation while positive and neutral sentiment have very strong and very weak correlations respectively. Similarly there isn't any significant change for Lockdown compared to other topics. Negative sentiment has a moderate positive correlation, positive sentiment has a strong negative correlation and finally, natural sentiment has a very weak negative correlation.
 
-\begin{table}[h]
-\begin{minipage}[c]{\linewidth}
-\centering
-\begin{tabular}{@{}ll@{}}
-\toprule
-Sentiment & Pearson Correlation Coefficient \\ \midrule
-Positive  & \multicolumn{1}{c}{-0.611}      \\
-Negative  & \multicolumn{1}{c}{0.555}       \\
-Neutral   & \multicolumn{1}{c}{-0.031}       \\ \bottomrule
-\end{tabular}
-\caption{Pearson Correlation Coefficients for Economy Sentiment}
-\label{tab:ecosen}
-\end{minipage}\hfill
-
-\end{table}
-
-We don't see any significant change for Lockdown in figure \ref{fig:locksen} and table \ref{tab:locksen}. Negative sentiment has a moderate positive correlation, positive sentiment has a strong negative correlation and finally, natural sentiment has a very weak negative correlation.
-
-\begin{table}[H]
-\begin{minipage}[c]{\linewidth}
-\centering
-\begin{tabular}{@{}ll@{}}
-\toprule
-Sentiment & Pearson Correlation Coefficient \\ \midrule
-Positive  & \multicolumn{1}{c}{-0.618}      \\
-Negative  & \multicolumn{1}{c}{0.583}       \\
-Neutral   & \multicolumn{1}{c}{-0.054}       \\ \bottomrule
-\end{tabular}
-\caption{Pearson Correlation Coefficients for Lockdown Sentiment}
-\label{tab:locksen}
-\end{minipage}\hfill
-
-\end{table}
-
-Lastly, for Politics, in figure \ref{fig:polsen} and table \ref{tab:polsen} we observe that both positive and negative sentiment have a moderate negative and positive correlation respectively whereas neutral sentiment is hardly correlated to misinformation.
-
-\begin{table}[h]
-\begin{minipage}[c]{\linewidth}
-\centering
-\begin{tabular}{@{}ll@{}}
-\toprule
-Sentiment & Pearson Correlation Coefficient \\ \midrule
-Positive  & \multicolumn{1}{c}{-0.509}      \\
-Negative  & \multicolumn{1}{c}{0.405}       \\
-Neutral   & \multicolumn{1}{c}{0.001}       \\ \bottomrule
-\end{tabular}
-\caption{Pearson Correlation Coefficients for Politics Sentiment}
-\label{tab:polsen}
-\end{minipage}\hfill
-
-\end{table}
-
-From our topics, we saw a moderate to strong positive correlation for negative sentiment in seven of them which means we can confidently say negative sentiment is a characteristic of misinformation.
+Lastly, for Politics, we observe that both positive and negative sentiment have a moderate negative and positive correlation respectively whereas neutral sentiment is hardly correlated to misinformation. Overall, from our topics, we saw a moderate to strong positive correlation for negative sentiment in seven of them which means we can confidently say negative sentiment is a characteristic of misinformation.
 
 \section{Emotion Analysis}
-In this section, we will look at the correlation between the emotions in each topic and misinformation. Figure \ref{fig:maskemo} and table \ref{tab:maskemo} show that we have a strong positive correlation for surprise, moderate positive correlations for anger and disgust, and weak negative correlations for joy, sadness, and fear. 
+In this section, we will look at the correlation between the emotions in each topic and misinformation. The correlation coefficients for the emotions of each topic are shown in table \ref{tab:topemo} 
 
 \begin{table}[H]
-\begin{minipage}[c]{0.30\linewidth}
 \centering
-\begin{tabular}{@{}lc@{}}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}lcccccccc@{}}
 \toprule
-Emotion  & \multicolumn{1}{l}{Pearson Correlation Coefficient} \\ \midrule
-Joy      & -0.237                                              \\
-Sadness  & -0.410                                              \\
-Anger    & 0.574                                               \\
-Surprise & 0.678                                               \\
-Disgust  & 0.591                                               \\
-Fear     & -0.373                                              \\ \bottomrule
-\end{tabular}
-\caption{Pearson Correlation Coefficients for Masks Emotions}
-\label{tab:maskemo}
-\end{minipage}\hfill
-\begin{minipage}[c]{0.55\linewidth}
-\centering
-\includegraphics[width=\textwidth]{images/MasksEmotion.png}
-\captionof{figure}{Ratios of Emotions and Misinformation for Masks}
-\label{fig:maskemo}
-\end{minipage}
+         & \multicolumn{1}{l}{Masks} & \multicolumn{1}{l}{Symptoms} & \multicolumn{1}{l}{Treatment} & \multicolumn{1}{l}{Science} & \multicolumn{1}{l}{Health} & \multicolumn{1}{l}{Economy} & \multicolumn{1}{l}{Lockdown} & \multicolumn{1}{l}{Politics} \\ \midrule
+         & \multicolumn{1}{l}{}      & \multicolumn{1}{l}{}         & \multicolumn{1}{l}{}          & \multicolumn{1}{l}{}        & \multicolumn{1}{l}{}       & \multicolumn{1}{l}{}        & \multicolumn{1}{l}{}         & \multicolumn{1}{l}{}         \\
+Joy      & -0.237                    & -0.362                       & 0.147                         & -0.340                      & -0.900                     & -0.317                      & -0.065                       & -0.038                       \\
+         &                           &                              &                               &                             &                            &                             &                              &                              \\
+Sadness  & -0.410                    & -0.364                       & 0.246                         & -0.324                      & 0.181                      & -0.568                      & -0.046                       & -0.239                       \\
+         &                           &                              &                               &                             &                            &                             &                              &                              \\
+Anger    & 0.574                     & 0.466                        & 0.561                         & 0.424                       & -0.458                     & 0.402                       & 0.761                        & 0.696                        \\
+         & \multicolumn{1}{l}{}      & \multicolumn{1}{l}{}         & \multicolumn{1}{l}{}          & \multicolumn{1}{l}{}        & \multicolumn{1}{l}{}       & \multicolumn{1}{l}{}        & \multicolumn{1}{l}{}         & \multicolumn{1}{l}{}         \\
+Surprise & 0.678                     & -0.012                       & 0.406                         & 0.205                       & -0.511                     & 0.178                       & 0.296                        & 0.267                        \\
+         & \multicolumn{1}{l}{}      & \multicolumn{1}{l}{}         & \multicolumn{1}{l}{}          & \multicolumn{1}{l}{}        & \multicolumn{1}{l}{}       & \multicolumn{1}{l}{}        & \multicolumn{1}{l}{}         & \multicolumn{1}{l}{}         \\
+Disgust  & 0.591                     & 0.561                        & 0.644                         & 0.423                       & -0.223                     & 0.468                       & 0.802                        & 0.713                        \\
+         & \multicolumn{1}{l}{}      & \multicolumn{1}{l}{}         & \multicolumn{1}{l}{}          & \multicolumn{1}{l}{}        & \multicolumn{1}{l}{}       & \multicolumn{1}{l}{}        & \multicolumn{1}{l}{}         & \multicolumn{1}{l}{}         \\
+Fear     & -0.373                    & -0.283                       & -0.542                        & -0.133                      & 0.758                      & -0.230                      & -0.655                       & -0.587                       \\
+         & \multicolumn{1}{l}{}      & \multicolumn{1}{l}{}         & \multicolumn{1}{l}{}          & \multicolumn{1}{l}{}        & \multicolumn{1}{l}{}       & \multicolumn{1}{l}{}        & \multicolumn{1}{l}{}         & \multicolumn{1}{l}{}         \\ \bottomrule
+\end{tabular}%
+}
+\caption{Pearson Correlation Coefficients for Emotion}
+\label{tab:topemo}
 \end{table}
 
-For Symptoms, we can see moderate positive correlations for anger and disgust in figure \ref{fig:sympemo} and table \ref{tab:sympemo} alongside weak correlation for joy, sadness, and fear, and a very weak negative correlation for a surprise.
+The table shows that for Masks we have a strong positive correlation for surprise, moderate positive correlations for anger and disgust, and weak negative correlations for joy, sadness, and fear. For Symptoms, we can see moderate positive correlations for anger and disgust alongside weak correlation for joy, sadness, and fear, and a very weak negative correlation for surprise.
 
-\begin{table}[h]
-\begin{minipage}[c]{\linewidth}
-\centering
-\begin{tabular}{@{}lc@{}}
-\toprule
-Emotion  & \multicolumn{1}{l}{Pearson Correlation Coefficient} \\ \midrule
-Joy      & -0.362                                              \\
-Sadness  & -0.364                                              \\
-Anger    & 0.466                                              \\
-Surprise & -0.012                                               \\
-Disgust  & 0.561                                               \\
-Fear     & -0.283                                              \\ \bottomrule
-\end{tabular}
-\caption{Pearson Correlation Coefficients for Symptoms Emotions}
-\label{tab:sympemo}
-\end{minipage}\hfill
+For Treatment, we can observe that other than fear, which has a strong negative correlation, the others all have positive correlations ranging from very weak (joy), weak (sadness), moderate (anger, surprise) and strong (disgust). It's interesting how almost all of the emotions contribute to increasing misinformation about the topic. Science shows a weak negative correlations for joy and sadness, moderate positive correlations for anger and disgust, and very weak negative and positive correlations for fear and surprise respectively.
 
-\end{table}
+For Health there is a very weak and strong positive correlation for sadness and fear respectively, a weak negative correlation for disgust, a moderate negative correlation for anger and surprise, and very strong negative correlation for joy. In previous topics, anger, surprise, and disgust had positive correlations while fear had a negative one but here it is the opposite like for sentiment analysis.
 
-For Treatment, we see in figure \ref{fig:treatemo} and table \ref{tab:treatemo} that other than fear, which has a strong negative correlation, the others all have positive correlations ranging from very weak (joy), weak (sadness), moderate (anger, surprise) and strong (disgust). It's interesting how almost all of the emotions contribute to increasing misinformation about the topic.
+Economy has a moderate positive correlation for anger and disgust and a very weak positive correlation for surprise. Joy and fear have weak negative correlations and sadness has a moderate negative correlation. Moving on, Lockdown has a very weak negative correlations for joy and sadness, and a strong negative correlation with fear. There's a weak and strong positive correlation for surprise and anger respectively, and finally there is a very strong correlation for disgust.
 
-\begin{table}[h]
-\begin{minipage}[c]{\linewidth}
-\centering
-\begin{tabular}{@{}lc@{}}
-\toprule
-Emotion  & \multicolumn{1}{l}{Pearson Correlation Coefficient} \\ \midrule
-Joy      & 0.147                                              \\
-Sadness  & 0.246                                              \\
-Anger    & 0.561                                               \\
-Surprise & 0.406                                               \\
-Disgust  & 0.644                                               \\
-Fear     & -0.542                                              \\ \bottomrule
-\end{tabular}
-\caption{Pearson Correlation Coefficients for Treatment Emotions}
-\label{tab:treatemo}
-\end{minipage}\hfill
+Finally for Politics, we observe a strong positive correlation for the emotions of anger and disgust, a weak positive correlation for surprise, very weak and weak negative correlations for joy and sadness, and a strong negative correlation for fear. From our findings, we see a moderate to strong positive correlation for anger and disgust and a weak to moderate correlation for surprise for most of the topics so we can safely see these three emotions are characteristics of misinformation.
 
-\end{table}
-
-In figure \ref{fig:sciemo} and table \ref{tab:sciemo} for Science, we can see weak negative correlations for joy and sadness, moderate positive correlations for anger and disgust, and very weak negative and positive correlations for fear and surprise respectively.
-
-\begin{table}[H]
-\begin{minipage}[c]{\linewidth}
-\centering
-\begin{tabular}{@{}lc@{}}
-\toprule
-Emotion  & \multicolumn{1}{l}{Pearson Correlation Coefficient} \\ \midrule
-Joy      & -0.340                                              \\
-Sadness  & -0.324                                              \\
-Anger    & 0.424                                               \\
-Surprise & 0.205                                               \\
-Disgust  & 0.423                                               \\
-Fear     & -0.133                                              \\ \bottomrule
-\end{tabular}
-\caption{Pearson Correlation Coefficients for Science Emotions}
-\label{tab:sciemo}
-\end{minipage}\hfill
-
-\end{table}
-
-For Health in figure \ref{fig:healthemo} and table \ref{tab:healthemo} there is a very weak and strong positive correlation for sadness and fear respectively, a weak negative correlation for disgust, a moderate negative correlation for anger and surprise, and very strong negative correlation for joy. In previous topics, anger, surprise, and disgust had positive correlations while fear had a negative one but here it is the opposite like for sentiment analysis.
-
-\begin{table}[H]
-\begin{minipage}[c]{0.30\linewidth}
-\centering
-\begin{tabular}{@{}lc@{}}
-\toprule
-Emotion  & \multicolumn{1}{l}{Pearson Correlation Coefficient} \\ \midrule
-Joy      & -0.900                                              \\
-Sadness  & 0.181                                              \\
-Anger    & -0.458                                               \\
-Surprise & -0.511                                               \\
-Disgust  & -0.223                                               \\
-Fear     & 0.758                                              \\ \bottomrule
-\end{tabular}
-\caption{Pearson Correlation Coefficients for Health Emotions}
-\label{tab:healthemo}
-\end{minipage}\hfill
-\begin{minipage}[c]{0.55\linewidth}
-\centering
-\includegraphics[width=\textwidth]{images/HealthEmotion.png}
-\captionof{figure}{Ratios of Emotions and Misinformation for Health}
-\label{fig:healthemo}
-\end{minipage}
-\end{table}
-
-Economy has a moderate positive correlation for anger and disgust in figure \ref{fig:ecoemo} and table \ref{tab:ecoemo} as well as a very weak positive correlation for surprise. Joy and fear have weak negative correlations and sadness has a moderate negative correlation.
-
-\begin{table}[h]
-\begin{minipage}[c]{\linewidth}
-\centering
-\begin{tabular}{@{}lc@{}}
-\toprule
-Emotion  & \multicolumn{1}{l}{Pearson Correlation Coefficient} \\ \midrule
-Joy      & -0.317                                              \\
-Sadness  & -0.568                                              \\
-Anger    & 0.402                                               \\
-Surprise & 0.178                                               \\
-Disgust  & 0.468                                               \\
-Fear     & -0.230                                              \\ \bottomrule
-\end{tabular}
-\caption{Pearson Correlation Coefficients for Economy Emotions}
-\label{tab:ecoemo}
-\end{minipage}\hfill
-
-\end{table}
-
-The topic Lockdown has a very weak negative correlations for joy and sadness in figure \ref{fig:lockemo} and table \ref{tab:lockemo} and strong negative correlation with fear. There's a weak and strong positive correlation for surprise and anger respectively, and finally there is a very strong correlation for disgust.
-
-\begin{table}[h]
-\begin{minipage}[c]{\linewidth}
-\centering
-\begin{tabular}{@{}lc@{}}
-\toprule
-Emotion  & \multicolumn{1}{l}{Pearson Correlation Coefficient} \\ \midrule
-Joy      & -0.065                                              \\
-Sadness  & -0.046                                              \\
-Anger    & 0.761                                               \\
-Surprise & 0.296                                               \\
-Disgust  & 0.802                                               \\
-Fear     & -0.655                                              \\ \bottomrule
-\end{tabular}
-\caption{Pearson Correlation Coefficients for Lockdown Emotions}
-\label{tab:lockemo}
-\end{minipage}\hfill
-
-\end{table}
-
-Finally for Politics, in figure \ref{fig:polemo} and table \ref{tab:polemo} we observe a strong positive correlation for the emotions of anger and disgust, a weak positive correlation for surprise, very weak and weak negative correlations for joy and sadness, and a strong negative correlation for fear.
-
-\begin{table}[H]
-\begin{minipage}[c]{\linewidth}
-\centering
-\begin{tabular}{@{}lc@{}}
-\toprule
-Emotion  & \multicolumn{1}{l}{Pearson Correlation Coefficient} \\ \midrule
-Joy      & -0.038                                              \\
-Sadness  & -0.239                                              \\
-Anger    & 0.696                                               \\
-Surprise & 0.267                                               \\
-Disgust  & 0.713                                               \\
-Fear     & -0.587                                              \\ \bottomrule
-\end{tabular}
-\caption{Pearson Correlation Coefficients for Politics Emotions}
-\label{tab:polemo}
-\end{minipage}\hfill
-
-\end{table}
-
-From our findings, we see a moderate to strong positive correlation for anger and disgust and a weak to moderate correlation for surprise for most of the topics so we can safely see these three emotions are characteristics of misinformation.
 
 \section{Overall Result}
 In this section, we'll consolidate our findings to answer our research question and prove the hypothesis. In sections 5.2 and 5.3 we concluded that negative sentiment, anger, surprise, and disgust are all characteristics of misinformation by looking at the individual topics. After finding the mean of the coefficients, we see in tables \ref{tab:avgsen} and \ref{tab:avgemo} that negative sentiment, anger, and disgust all have a moderate positive correlation to misinformation so they indeed are characteristics of it. Surprise has a very weak positive correlation so it can't be called a proper characteristic. 
@@ -760,6 +496,21 @@ Finally, since the original proposal mentions ad-hoc search results, we would cr
 \begin{figure}[H]
 \begin{minipage}[c]{0.49\linewidth}
 \centering
+\includegraphics[width=\textwidth]{images/MasksEmotion.png}
+\captionof{figure}{Ratios of Emotions and Misinformation for Masks}
+\label{fig:maskemo}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.49\linewidth}
+\centering
+\includegraphics[width=\textwidth]{images/HealthSentiment.png}
+\captionof{figure}{Ratios of Sentiment and Misinformation for Health}
+\label{fig:healthsen}
+\end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+\begin{minipage}[c]{0.49\linewidth}
+\centering
 \includegraphics[width=\textwidth]{images/SymptomsSentiment.png}
 \captionof{figure}{Ratios of Sentiment and Misinformation for Symptoms}
 \label{fig:sympsen}
@@ -778,7 +529,7 @@ Finally, since the original proposal mentions ad-hoc search results, we would cr
 \includegraphics[width=\textwidth]{images/ScienceSentiment.png}
 \captionof{figure}{Ratios of Sentiment and Misinformation for Science}
 \label{fig:scisen}
-\end{minipage}
+\end{minipage}\hfill
 \begin{minipage}[c]{0.49\linewidth}
 \centering
 \includegraphics[width=\textwidth]{images/EconomySentiment.png}
@@ -793,7 +544,7 @@ Finally, since the original proposal mentions ad-hoc search results, we would cr
 \includegraphics[width=\textwidth]{images/LockdownSentiment.png}
 \captionof{figure}{Ratios of Sentiment and Misinformation for Lockdown}
 \label{fig:locksen}
-\end{minipage}
+\end{minipage}\hfill
 \begin{minipage}[c]{0.49\linewidth}
 \centering
 \includegraphics[width=\textwidth]{images/PoliticsSentiment.png}
@@ -807,10 +558,25 @@ Finally, since the original proposal mentions ad-hoc search results, we would cr
 \begin{figure}[H]
 \begin{minipage}[c]{0.49\linewidth}
 \centering
+\includegraphics[width=\textwidth]{images/MasksEmotion.png}
+\captionof{figure}{Ratios of Emotions and Misinformation for Masks}
+\label{fig:maskemo}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.49\linewidth}
+\centering
+\includegraphics[width=\textwidth]{images/HealthEmotion.png}
+\captionof{figure}{Ratios of Emotions and Misinformation for Health}
+\label{fig:healthemo}
+\end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+\begin{minipage}[c]{0.49\linewidth}
+\centering
 \includegraphics[width=\textwidth]{images/SymptomsEmotion.png}
 \captionof{figure}{Ratios of Emotions and Misinformation for Symptoms}
 \label{fig:sympemo}
-\end{minipage}
+\end{minipage}\hfill
 \begin{minipage}[c]{0.49\linewidth}
 \centering
 \includegraphics[width=\textwidth]{images/TreatmentEmotion.png}
@@ -825,7 +591,7 @@ Finally, since the original proposal mentions ad-hoc search results, we would cr
 \includegraphics[width=\textwidth]{images/ScienceEmotion.png}
 \captionof{figure}{Ratios of Emotions and Misinformation for Science}
 \label{fig:sciemo}
-\end{minipage}
+\end{minipage}\hfill
 \begin{minipage}[c]{0.49\linewidth}
 \centering
 \includegraphics[width=\textwidth]{images/EconomyEmotion.png}
@@ -840,7 +606,7 @@ Finally, since the original proposal mentions ad-hoc search results, we would cr
 \includegraphics[width=\textwidth]{images/LockdownEmotion.png}
 \captionof{figure}{Ratios of Emotions and Misinformation for Lockdown}
 \label{fig:lockemo}
-\end{minipage}
+\end{minipage}\hfill
 \begin{minipage}[c]{0.49\linewidth}
 \centering
 \includegraphics[width=\textwidth]{images/PoliticsEmotion.png}

@@ -1,1 +1,0 @@
-The data folder is compressed into a .zip file to save space for the submission. Simply extract it.
